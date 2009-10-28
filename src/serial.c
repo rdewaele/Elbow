@@ -84,6 +84,14 @@ char * serial_read(int fd) {
 
   /* successful read: mark end of string and return it */
   buf[res] = '\0';
+
+#ifdef DEBUG
+	puts("\nDEBUG: serial read buffer on next line:");
+	for(int i = 0; i < res; ++i)
+		printf("%d ", buf[i]);
+	printf("\n");
+#endif /* #ifdef DEBUG */
+
   return buf;
 }
 
