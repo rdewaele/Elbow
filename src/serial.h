@@ -20,12 +20,12 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
+#include <unistd.h>
+
 /* initialize a serial device and return file descriptor to it */
 int serial_init(const char * device);
-/* read from serial device and return a pointer to a newly malloc'd string */
-char * serial_read(int fd);
-/* empty program's output buffer
- * and terminate it with the device's favorite newline character */
-void serial_flush(int fd);
+
+ssize_t serial_read(int serial_fd, char *buf, size_t len);
+ssize_t serial_write(int serial_fd, const char *buf, size_t len);
 
 #endif

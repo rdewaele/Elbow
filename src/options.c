@@ -17,21 +17,6 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GETOPT_H
-#define GETOPT_H
+#include <libconfig.h>
 
-#include <stdbool.h>
 
-struct options {
-  int rate;
-  const char * device;
-  const char * eol;
-  char * file;
-	bool startstop;
-};
-
-struct options options;
-
-void setOptions(int argc, char * const argv[]);
-
-#endif /* #ifndef GETOPT_H */

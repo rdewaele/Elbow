@@ -23,6 +23,7 @@
 
 #include "sendfiles.h"
 #include "serial.h"
+#include "getopt.h"
 
 #define READBUF_SIZE 200
 #define STX 0x2
@@ -45,15 +46,18 @@ void sendfiles(int amount, char *files[], int serial_fd) {
       return;
     }
 
+		j = 0;
+		if (options.startstop) {
     /* fill readbuf with file contents, starting with the STX ASCII char */
-    readbuf[0] = STX;
-    j = 1;
+    readbuf[j++] = STX;
+		}
+
     while (EOF != (cin = getc(currentFile))) {
       /* store character and send buffer to device when full */
       readbuf[j] = cin;
       if (READBUF_SIZE == j) {
-        serial_flush(serial_fd);
-        cwritten = write(serial_fd, readbuf, j + 1);
+        //serial_flush(serial_fd);
+        cwritten = serial_write(serial_fd, readbuf, j + 1);
         if (cwritten < 0) {
           perror("sending file failed");
           return;
@@ -65,19 +69,24 @@ void sendfiles(int amount, char *files[], int serial_fd) {
       }
     }
 
+		if (options.startstop) {
     /* EOF was reached, write remainder (if present) to device
      * and include the terminating character '\n' */
     readbuf[j++] = ETX;
-    cwritten = write(serial_fd, readbuf, j);
+		}
+
+    cwritten = serial_write(serial_fd, readbuf, j);
     if (cwritten < 0) {
       perror("marking end of file failed");
       return;
     }
 
     /* wait for other end to finish reading */
-    serial_flush(serial_fd);
+    //serial_flush(serial_fd);
 
     /* done processing the current file */
     fclose(currentFile);
   }
+	/* finalize input by sending the appropriate EOL */
+	//serial_write(serial_fd, options.eol, 1); 
 }

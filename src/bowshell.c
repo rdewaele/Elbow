@@ -18,36 +18,57 @@
  */
 
 #include "bowshell.h"
+#include "serial.h"
+#include "getopt.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <readline/readline.h> /* gnu readline */
 #include <readline/history.h> /* gnu readline history */
 
 #define DEFAULT_PROMPT ""
 
+static int target_fd;
 
-/* read a string, return a pointer to it
- * Returns NULL on EOF */
-char * rl_gets (void) {
-
-	/* static variable to store read lines */
-	static char * line_read = (char *)NULL;
-
-	/* if the buffer has already been allocated,
-	 * return the memory to the free pool */
-	if (line_read != NULL) {
-		free (line_read);
-		line_read = (char *)NULL;
+static void bowshell_callback(char *line) {
+	if (line) {
+		serial_write(target_fd, line, strlen(line));
+		serial_write(target_fd, options.eol, 1);
+		if (*line) /* non empty lines go in to history */
+			add_history (line);
 	}
+	else
+		exit(EXIT_SUCCESS);
 
-	/* get a line */
-	line_read = readline ( DEFAULT_PROMPT );
+	free(line);
+}
 
-	/* save non-empty lines in the history */
-	if (line_read && *line_read)
-		add_history (line_read);
+void bowshell_init(int new_target_fd) {
+	target_fd = new_target_fd;
+	rl_callback_handler_install (DEFAULT_PROMPT, bowshell_callback);
+}
 
-	return (line_read);
+void bowshell_notify() {
+	rl_callback_read_char();
+}
+
+int bowshell_print (char *text) {
+	int ret;
+	unsigned int i;
+	rl_save_prompt();
+
+	for (i = 0; i < strlen(rl_line_buffer); ++i)
+		printf("\b \b");
+
+	// DEBUG
+	//putc('\n', stdout);
+	//for (i = 0; text[i] != '\0'; ++i)
+	//	printf("%d ", text[i]);
+	//putc('\n', stdout);
+	// DEBUG
+	ret = printf("%s", text);
+	rl_forced_update_display();
+	return ret;
 }

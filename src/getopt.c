@@ -38,6 +38,7 @@
 #define DEFAULT_BAUDRATE     B230400
 #define DEFAULT_DEVICE      "/dev/ttyUSB0"
 #define DEFAULT_END_OF_LINE "\n"
+#define DEFAULT_STARTSTOP   0
 
 #ifndef __linux__
 #define B57600  57600
@@ -49,7 +50,8 @@ struct options options = {
   DEFAULT_BAUDRATE,
   DEFAULT_DEVICE,
   DEFAULT_END_OF_LINE,
-  NULL
+  NULL,
+	DEFAULT_STARTSTOP
 };
 
 void setOptions(int argc, char * const argv[]) {

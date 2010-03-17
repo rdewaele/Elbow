@@ -16,4 +16,5 @@
 # along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
 
 all:
-	$(MAKE) -C src
+%:
+	$(MAKE) -C src $@

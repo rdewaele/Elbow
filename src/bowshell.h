@@ -24,4 +24,10 @@
  * Returns NULL on EOF */
 char * rl_gets(void);
 
+int bowshell_print (char *text);
+
+void bowshell_init(int fd);
+
+void bowshell_notify(void);
+
 #endif
