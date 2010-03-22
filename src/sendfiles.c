@@ -17,9 +17,13 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <termios.h>
+#include <unistd.h>
 
 #include "sendfiles.h"
 #include "serial.h"
@@ -29,7 +33,33 @@
 #define STX 0x2
 #define ETX 0x3
 
-void sendfiles(int amount, char *files[], int serial_fd) {
+void replacechars(char * str, char from, char to) {
+	while ((str = strchr(str, from)))
+		*str = to;
+}
+
+void sendfiles(int filesc, char * filesv[], int serialfd) {
+	int filesfd;
+	int i;
+	ssize_t n_read;
+	char readbuf[READBUF_SIZE];
+
+	for (i = 0; i < filesc; ++i) {
+		filesfd = open(filesv[i], O_RDONLY);
+		if (-1 == filesfd) {
+			perror(filesv[i]);
+			continue;
+		}
+		while ((n_read = read(filesfd, readbuf, READBUF_SIZE)) > 0) {
+			replacechars(readbuf, '\n', '\r');
+			replacechars(readbuf, '\t', ' ');
+			serial_write(serialfd, readbuf, n_read);
+		}
+	}
+	return;
+}
+
+void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
   FILE *currentFile = NULL;
   char readbuf[READBUF_SIZE + 2];
   int cin;

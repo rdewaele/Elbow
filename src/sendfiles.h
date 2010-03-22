@@ -20,6 +20,7 @@
 #ifndef SENDFILES_H
 #define SENDFILES_H
 
-void sendfiles(int amount, char *files[], int fd_out);
+void sendfiles_deprecated(int amount, char *files[], int fd_out);
+void sendfiles(int filesc, char * filesv[], int serialfd);
 
 #endif
