@@ -1,0 +1,20 @@
+(begin
+  (define (loop1 n)
+    (let iter ((i 0))
+      (if (< i n)
+        (begin (display i)
+               (iter (+ 1 i)))
+        (newline))))
+
+  (define (loop2 n)
+    (let iter ((i 0))
+      (if (< n i)
+        (begin (display i)
+               (iter (+ 1 i)))
+        (newline))))
+
+  (define (loop3 n)
+    (if (< n 10)
+      (begin (display n)
+             (loop3 (+ 1 n)))
+      (newline))))
