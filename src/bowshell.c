@@ -32,42 +32,48 @@
 
 static int target_fd;
 
+/* GNU readline callback function, to process user input. */
 static void bowshell_callback(char *line) {
+	/* EOF is indicated by line == NULL (see GNU readline documentation) */
 	if (line) {
 		serial_write(target_fd, line, strlen(line));
 		serial_write(target_fd, options.eol, 1);
 		if (*line) /* non empty lines go in to history */
 			add_history (line);
 	}
-	else
+	else {
+		puts("Thank you, come again!");
 		exit(EXIT_SUCCESS);
+	}
 
 	free(line);
 }
 
+/* set fd for serial output and install the bowshell callback function */
 void bowshell_init(int new_target_fd) {
 	target_fd = new_target_fd;
 	rl_callback_handler_install (DEFAULT_PROMPT, bowshell_callback);
 }
 
+/* feed next character on the input to readline
+ * the bowhsell callback will be called when this character completes the
+ * line (see GNU readline documentation) */
 void bowshell_notify() {
 	rl_callback_read_char();
 }
 
+/* print the buffer pointed to by text to stdout (will keep user input on
+ * bottom line when present */
 int bowshell_print (char *text) {
 	int ret;
 	unsigned int i;
 	rl_save_prompt();
 
+	/* erase current line */
 	for (i = 0; i < strlen(rl_line_buffer); ++i)
 		printf("\b \b");
 
-	// DEBUG
-	//putc('\n', stdout);
-	//for (i = 0; text[i] != '\0'; ++i)
-	//	printf("%d ", text[i]);
-	//putc('\n', stdout);
-	// DEBUG
+	/* print line and return number of characters printed */
 	ret = printf("%s", text);
 	rl_forced_update_display();
 	return ret;

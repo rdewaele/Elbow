@@ -20,14 +20,17 @@
 #ifndef BOWSHELL_H
 #define BOWHSELL_H
 
-/* read a string, return a pointer to it
- * Returns NULL on EOF */
-char * rl_gets(void);
-
+/* print the buffer pointed to by text to stdout
+ * will keep user input on the bottom line when present */
 int bowshell_print (char *text);
 
+/* initialize bowshell must be called before any other bowshell
+ * functionality is used
+ * fd is where user input should be sent to */
 void bowshell_init(int fd);
 
+/* bowshell_notify should be called every time user input
+ * becomes vailable, so bowshell can handle it */
 void bowshell_notify(void);
 
 #endif

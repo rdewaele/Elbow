@@ -22,10 +22,10 @@
 # $? = The names of all the dependencies that are newer than the target, with spaces between them.
 # $* = The stem with which an implicit rule matches. If the target is 'dir/a.foo.b' and the target pattern is 'a.%.b' then the stem is 'dir/foo'. The stem is useful for constructing names of related files.
 
-CCWARNINGS= -W -Wall -Wextra -Wundef -Wendif-labels -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wdisabled-optimization
+CCWARNINGS= -W -Wall -Wextra -Wundef -Wendif-labels -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wdisabled-optimization -Wno-missing-field-initializers
 CCFLAGS= -g -O3 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE $(CCWARNINGS) #-DDEBUG
-LDFLAGS= -Wall -lreadline #-lconfig
-SOURCES= main_new.c bowshell.c serial.c sendfiles.c getopt.c #options.c
+LDFLAGS= -Wall -lreadline
+SOURCES= main.c bowshell.c serial.c sendfiles.c getopt.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE= elbow
 DATE=`date +%F_%H-%M-%S`
