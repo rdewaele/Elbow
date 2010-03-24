@@ -59,7 +59,8 @@ int main(int argc, char * argv[]) {
 
 	nfds = 1 + (serial_fd > stdin_fd ? serial_fd : stdin_fd);
 
-	/* start receiving from the pipe to the child process and from the serial device */
+	/* start receiving from the pipe to the child process and from the
+	 * serial device */
 	for (;;) {
 		/* reset "fd_set"s each loop because select() modifies it */
 		FD_ZERO( &rd );
