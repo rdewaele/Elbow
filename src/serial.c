@@ -18,7 +18,7 @@
  */
 
 #include "serial.h"
-#include "getopt.h"
+#include "options.h"
 
 #include <unistd.h>
 #include <fcntl.h>

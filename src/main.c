@@ -20,7 +20,7 @@
 #include "bowshell.h"
 #include "serial.h"
 #include "sendfiles.h"
-#include "getopt.h"
+#include "options.h"
 
 #include <stdio.h>
 #include <stdlib.h>

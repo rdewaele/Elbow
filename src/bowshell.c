@@ -19,7 +19,7 @@
 
 #include "bowshell.h"
 #include "serial.h"
-#include "getopt.h"
+#include "options.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +42,7 @@ static void bowshell_callback(char *line) {
 			add_history (line);
 	}
 	else {
-		puts("Thank you, come again!");
+		puts("\nThank you, come again!");
 		exit(EXIT_SUCCESS);
 	}
 

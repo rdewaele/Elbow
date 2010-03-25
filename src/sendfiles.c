@@ -27,13 +27,13 @@
 
 #include "sendfiles.h"
 #include "serial.h"
-#include "getopt.h"
+#include "options.h"
 
 #define READBUF_SIZE 200
 #define STX 0x2
 #define ETX 0x3
 
-void replacechars(char * str, char from, char to) {
+static void replacechars(char * str, char from, char to) {
 	while ((str = strchr(str, from)))
 		*str = to;
 }
@@ -77,7 +77,7 @@ void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
     }
 
 		j = 0;
-		if (options.startstop) {
+		if (options.etxstx) {
     /* fill readbuf with file contents, starting with the STX ASCII char */
     readbuf[j++] = STX;
 		}
@@ -99,7 +99,7 @@ void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
       }
     }
 
-		if (options.startstop) {
+		if (options.etxstx) {
     /* EOF was reached, write remainder (if present) to device
      * and include the terminating character '\n' */
     readbuf[j++] = ETX;
