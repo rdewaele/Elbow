@@ -24,7 +24,7 @@
 
 CCWARNINGS= -W -Wall -Wextra -Wundef -Wendif-labels -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wdisabled-optimization -Wno-missing-field-initializers
 CCFLAGS= -g -O3 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE $(CCWARNINGS) #-DDEBUG
-LDFLAGS= -Wall -lreadline
+LDFLAGS= -Wall -lreadline -lpopt
 SOURCES= main.c bowshell.c serial.c sendfiles.c options.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE= elbow

@@ -37,7 +37,7 @@ static void bowshell_callback(char *line) {
 	/* EOF is indicated by line == NULL (see GNU readline documentation) */
 	if (line) {
 		serial_write(target_fd, line, strlen(line));
-		serial_write(target_fd, options.eol, 1);
+		serial_write(target_fd, settings.eol, 1);
 		if (*line) /* non empty lines go in to history */
 			add_history (line);
 	}

@@ -33,7 +33,7 @@
 /* ---- */
 /* MAIN */
 /* ---- */
-int main(int argc, char * argv[]) {
+int main(int argc, const char * argv[]) {
 	int cread, serial_fd, stdin_fd, nfds, fds_ready;
 	char readbuf[DEFAULT_BUFFER_SIZE];
 
@@ -41,11 +41,11 @@ int main(int argc, char * argv[]) {
 	setOptions(argc, argv);
 
 	/* initialize the serial port */
-	serial_fd = serial_init(options.device);
+	serial_fd = serial_init(settings.device);
 
 	/* check whether there are files to be sent first */
-	if (options.file)
-		sendfiles(1, &options.file, serial_fd);
+	if (settings.file)
+		sendfiles(1, &(settings.file), serial_fd);
 
 	/* initialize bowshell */
 	bowshell_init(serial_fd);

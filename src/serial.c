@@ -54,8 +54,8 @@ int serial_init(const char * device) {
   newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
   newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
 
-  cfsetispeed(&newtio, options.rate);
-  cfsetospeed(&newtio, options.rate);
+  cfsetispeed(&newtio, settings.rate);
+  cfsetospeed(&newtio, settings.rate);
 
   /* when we are _initialising_ a device, we generally don't care what was
    * left on its output buffer (maybe from previous operations or whatever

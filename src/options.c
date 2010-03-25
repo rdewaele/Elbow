@@ -22,11 +22,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <popt.h>
 
 #include "options.h"
 
-/* default options */
-struct options options = {
+/* default settings */
+struct settings settings = {
 	B9600,
 	"/dev/ttyUSB0",
 	"\n",
@@ -69,7 +70,7 @@ static int getBaudrate(int baudrate) {
 }
 
 /* set options from command line */
-void setOptions(int argc, char * const argv[]) {
+static void setOptions_deprecated(int argc, char * const argv[]) {
 	int opt, rate;
 
 	/*
@@ -82,22 +83,22 @@ void setOptions(int argc, char * const argv[]) {
 		switch (opt) {
 			case 'b':
 				rate = atoi(optarg);
-				options.rate = getBaudrate(rate);
+				settings.rate = getBaudrate(rate);
 				break;
 			case 'd':
-				options.device = optarg;
+				settings.device = optarg;
 				break;
 			case 'e':
 				if (0 == strcmp("cr", optarg)) {
-					options.eol = "\r";
+					settings.eol = "\r";
 					break;
 				}
 				if (0 == strcmp("lf", optarg)) {
-					options.eol = "\n";
+					settings.eol = "\n";
 					break;
 				}
 				if (0 == strcmp("crlf", optarg)) {
-					options.eol = "\r\n";
+					settings.eol = "\r\n";
 					break;
 				}
 				fprintf(stderr,
@@ -107,7 +108,7 @@ void setOptions(int argc, char * const argv[]) {
 						"'crlf' (carriage return followed by a line feed)\n");
 				exit(EXIT_FAILURE);
 			case 'f':
-				options.file = optarg;
+				settings.file = optarg;
 				break;
 			case 'V':
 				printf("Elbow %s - (C) %s %s\nReleased under %s.\n\n%s\n", VERSION, YEAR, AUTHOR, LICENSE, DISCLAIMER);
@@ -127,4 +128,56 @@ void setOptions(int argc, char * const argv[]) {
 				exit(EXIT_FAILURE);
 		}
 	}
+}
+
+/*********************************************************/
+/* libpopt structures defining all the options for Elbow */
+/*********************************************************/
+
+/*
+ * b = baudrate
+ * d = device
+ * e = end of line
+ * f = file
+ */
+
+static struct poptOption elbowOptionsTable[] = {
+	{ "baudrate", 'b', POPT_ARG_INT, &settings.rate, 0,
+		"baudrate to use for communication",
+		"baudrate" },
+
+	{ "device", 'd', POPT_ARG_STRING, &settings.device, 0,
+		"device node to connect to",
+		"device" },
+
+	{ "eol", 'e', POPT_ARG_STRING, &settings.eol, 0,
+		"end of line character to use - valid: cr, lf, crlf",
+		"end of line" },
+
+	{ "file", 'f', POPT_ARG_STRING, &settings.file, 0,
+		"file to send before starting interactive session",
+		"file" },
+
+	{ "stxetx", 'S', POPT_ARG_NONE, &settings.stxetx, 0,
+		"use STX/ETX ascii codes to mark start/end of a file transmission",
+		NULL },
+
+	POPT_TABLEEND
+};
+
+static struct poptOption options[] = {
+	{ NULL, '\0', POPT_ARG_INCLUDE_TABLE, NULL, 0,
+		"Elbow options",
+		NULL },
+
+	POPT_AUTOHELP	POPT_TABLEEND
+};
+
+void setOptions(int argc, const char * argv[]) {
+	poptContext optCon = poptGetContext(NULL, argc, argv, options, 0);
+
+	options[0].arg = elbowOptionsTable;
+
+	poptGetNextOpt(optCon);
+	optCon = poptFreeContext(optCon);
 }

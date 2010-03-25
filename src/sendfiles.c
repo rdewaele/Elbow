@@ -38,7 +38,7 @@ static void replacechars(char * str, char from, char to) {
 		*str = to;
 }
 
-void sendfiles(int filesc, char * filesv[], int serialfd) {
+void sendfiles(int filesc, const char * filesv[], int serialfd) {
 	int filesfd;
 	int i;
 	ssize_t n_read;
@@ -59,7 +59,7 @@ void sendfiles(int filesc, char * filesv[], int serialfd) {
 	return;
 }
 
-void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
+static void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
   FILE *currentFile = NULL;
   char readbuf[READBUF_SIZE + 2];
   int cin;
@@ -77,7 +77,7 @@ void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
     }
 
 		j = 0;
-		if (options.etxstx) {
+		if (settings.stxetx) {
     /* fill readbuf with file contents, starting with the STX ASCII char */
     readbuf[j++] = STX;
 		}
@@ -99,7 +99,7 @@ void sendfiles_deprecated(int amount, char *files[], int serial_fd) {
       }
     }
 
-		if (options.etxstx) {
+		if (settings.stxetx) {
     /* EOF was reached, write remainder (if present) to device
      * and include the terminating character '\n' */
     readbuf[j++] = ETX;

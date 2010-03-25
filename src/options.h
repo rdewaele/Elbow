@@ -41,15 +41,15 @@
 
 /* this struct is initialized with default options, which will be
  * overridden by command line options when present */
-struct options {
+struct settings {
 	int rate;
 	const char * device;
 	const char * eol;
-	char * file;
-	bool etxstx;
-} options;
+	const char * file;
+	bool stxetx;
+} settings;
 
 /* parse the command line options and set them in the options struct */
-void setOptions(int argc, char * const argv[]);
+void setOptions(int argc, const char * argv[]);
 
 #endif /* #ifndef OPTIONS_H */
