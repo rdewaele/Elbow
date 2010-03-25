@@ -44,9 +44,9 @@
 struct options {
 	int rate;
 	const char * device;
-	const char    * eol;
-	char * file        ;
-	bool etxstx        ;
+	const char * eol;
+	char * file;
+	bool etxstx;
 } options;
 
 /* parse the command line options and set them in the options struct */

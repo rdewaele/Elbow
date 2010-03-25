@@ -25,10 +25,20 @@
 
 #include "options.h"
 
+/* default options */
+struct options options = {
+	B9600,
+	"/dev/ttyUSB0",
+	"\n",
+	NULL,
+	false
+};
+
 #define BPAIR(x) {x, B ## x}
 #define BPAIR_SIZE (sizeof((int[])BPAIR(50)) / sizeof(int))
 #define BAUDRATES_SIZE (sizeof(baudrates) / sizeof(int *))
 
+/* array of valid (baudrate number, baudrate constant) pairs */
 static int baudrates[][BPAIR_SIZE] =
 {
 	BPAIR(50), BPAIR(75), BPAIR(110), BPAIR(134),	BPAIR(150),
@@ -37,6 +47,7 @@ static int baudrates[][BPAIR_SIZE] =
 	BPAIR(57600), BPAIR(115200), BPAIR(230400)
 };
 
+/* print all valid baudrate numbers */
 static void printBaudrates(void) {
 	unsigned int i;
 	printf("Invalid baudrate!\nValid baudrates are: ");
@@ -45,6 +56,8 @@ static void printBaudrates(void) {
 	printf("%d\n", baudrates[i][0]);
 }
 
+/* lookup baudrate number and return baudrate constant
+ * exits when baudrate number is invalid */
 static int getBaudrate(int baudrate) {
 	unsigned int i = 0;
 	while (i < BAUDRATES_SIZE && baudrate != baudrates[i++][0]);
@@ -55,6 +68,7 @@ static int getBaudrate(int baudrate) {
 	return baudrates[i - 1][1];
 }
 
+/* set options from command line */
 void setOptions(int argc, char * const argv[]) {
 	int opt, rate;
 
