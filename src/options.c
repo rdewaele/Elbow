@@ -30,14 +30,14 @@
 struct settings settings = {
 	B9600,
 	"/dev/ttyUSB0",
-	"\n",
+	"\r",
 	NULL,
 	false
 };
 
 #define BPAIR(x) {x, B ## x}
 #define BPAIR_SIZE (sizeof((int[])BPAIR(50)) / sizeof(int))
-#define BAUDRATES_SIZE (sizeof(baudrates) / sizeof(int *))
+#define BAUDRATES_SIZE (sizeof(baudrates) / (BPAIR_SIZE * sizeof(int *)))
 
 /* array of valid (baudrate number, baudrate constant) pairs */
 static int baudrates[][BPAIR_SIZE] =
@@ -46,6 +46,16 @@ static int baudrates[][BPAIR_SIZE] =
 	BPAIR(200), BPAIR(300), BPAIR(600), BPAIR(1200), BPAIR(1800),
 	BPAIR(2400), BPAIR(4800), BPAIR(9600), BPAIR(19200), BPAIR(38400),
 	BPAIR(57600), BPAIR(115200), BPAIR(230400)
+};
+
+#define ENDLINES_SIZE (sizeof(endlines) / ((sizeof(*endlines) / sizeof(**endlines)) * sizeof(char *)))
+
+/* array maps commandline 'cr', 'lf' and 'crlf' to the real ascii characters */
+static const char * endlines[][2] =
+{
+	{ "cr", "\r" },
+	{ "lf", "\n" },
+	{ "crlf", "\r\n" }
 };
 
 /* print all valid baudrate numbers */
@@ -60,74 +70,25 @@ static void printBaudrates(void) {
 /* lookup baudrate number and return baudrate constant
  * exits when baudrate number is invalid */
 static int getBaudrate(int baudrate) {
-	unsigned int i = 0;
-	while (i < BAUDRATES_SIZE && baudrate != baudrates[i++][0]);
-	if (BAUDRATES_SIZE == i) {
-		printBaudrates();
-		exit(EXIT_FAILURE);
+	unsigned int i;
+	for (i = 0; i < BAUDRATES_SIZE; ++i) {
+		if (baudrates[i][0] == baudrate)
+			return baudrates[i][1];
 	}
-	return baudrates[i - 1][1];
+
+	printBaudrates();
+	exit(EXIT_FAILURE);
 }
 
-/* set options from command line */
-static void setOptions_deprecated(int argc, char * const argv[]) {
-	int opt, rate;
+static const char * getEndOfLine(const char * description) {
+	unsigned int i;
 
-	/*
-	 * b = baudrate
-	 * d = device
-	 * e = end of line
-	 * f = file
-	 */
-	while ((opt = getopt(argc, argv, "b:d:e:f:hV")) != -1) {
-		switch (opt) {
-			case 'b':
-				rate = atoi(optarg);
-				settings.rate = getBaudrate(rate);
-				break;
-			case 'd':
-				settings.device = optarg;
-				break;
-			case 'e':
-				if (0 == strcmp("cr", optarg)) {
-					settings.eol = "\r";
-					break;
-				}
-				if (0 == strcmp("lf", optarg)) {
-					settings.eol = "\n";
-					break;
-				}
-				if (0 == strcmp("crlf", optarg)) {
-					settings.eol = "\r\n";
-					break;
-				}
-				fprintf(stderr,
-						"Valid end of line characters are:\n"
-						"'cr' (carriage return)\n"
-						"'lf' (line feed)\n"
-						"'crlf' (carriage return followed by a line feed)\n");
-				exit(EXIT_FAILURE);
-			case 'f':
-				settings.file = optarg;
-				break;
-			case 'V':
-				printf("Elbow %s - (C) %s %s\nReleased under %s.\n\n%s\n", VERSION, YEAR, AUTHOR, LICENSE, DISCLAIMER);
-				exit(EXIT_SUCCESS);
-				break;
-			case 'h':
-			default: /* '?' */
-				fprintf(stderr, "Usage: %s [options]\n"
-						"option" "\t<argument>" "\tdefault     " "\tdescription:\n"
+	for (i = 0; i < ENDLINES_SIZE; ++i)
+		if (0 == strcmp(description, endlines[i][0]))
+			return endlines[i][1];
 
-						"-b"     "\t<baudrate>" "\t230400      " "\tcommunication baudrate\n"
-						"-d"     "\t<device>  " "\t/dev/ttyUSB0" "\tdevice node to connect to\n"
-						"-e"     "\t<EOL>     " "\tlf          " "\tEnd Of Line character - valid: cr, lf, crlf\n"
-						"-f"     "\t<file>    " "\t            " "\tchoose which file to transfer to the device\n"
-						"-h"     "\t          " "\t            " "\tshow this information\n"
-						,argv[0]);
-				exit(EXIT_FAILURE);
-		}
-	}
+	puts("invalid end of line, see help for valid options");
+	exit(EXIT_FAILURE);
 }
 
 /*********************************************************/
@@ -142,7 +103,7 @@ static void setOptions_deprecated(int argc, char * const argv[]) {
  */
 
 static struct poptOption elbowOptionsTable[] = {
-	{ "baudrate", 'b', POPT_ARG_INT, &settings.rate, 0,
+	{ "baudrate", 'b', POPT_ARG_INT, &settings.rate, 2,
 		"baudrate to use for communication",
 		"baudrate" },
 
@@ -150,7 +111,7 @@ static struct poptOption elbowOptionsTable[] = {
 		"device node to connect to",
 		"device" },
 
-	{ "eol", 'e', POPT_ARG_STRING, &settings.eol, 0,
+	{ "eol", 'e', POPT_ARG_STRING, &settings.eol, 1,
 		"end of line character to use - valid: cr, lf, crlf",
 		"end of line" },
 
@@ -174,10 +135,25 @@ static struct poptOption options[] = {
 };
 
 void setOptions(int argc, const char * argv[]) {
+	int ret;
+
 	poptContext optCon = poptGetContext(NULL, argc, argv, options, 0);
 
 	options[0].arg = elbowOptionsTable;
 
-	poptGetNextOpt(optCon);
+	while ((ret = poptGetNextOpt(optCon))) {
+		if (-1 == ret) /* parsing done */
+			break;
+
+		switch (ret) {
+			case 1: /* eol */
+				settings.eol = getEndOfLine(settings.eol);
+				break;
+			case 2: /* baudrate */
+				settings.rate = getBaudrate(settings.rate);
+				break;
+		}
+	}
+
 	optCon = poptFreeContext(optCon);
 }
