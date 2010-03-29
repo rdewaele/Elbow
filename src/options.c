@@ -123,6 +123,10 @@ static struct poptOption elbowOptionsTable[] = {
 		"use STX/ETX ascii codes to mark start/end of a file transmission",
 		NULL },
 
+	{ "version", 'v', POPT_ARG_NONE, NULL, 3,
+		"show version and copyright information",
+		NULL },
+
 	POPT_TABLEEND
 };
 
@@ -151,6 +155,14 @@ void setOptions(int argc, const char * argv[]) {
 				break;
 			case 2: /* baudrate */
 				settings.rate = getBaudrate(settings.rate);
+				break;
+			case 3: /* version */
+				printf("Elbow version %s\n", VERSION);
+				printf("Copyright (C) %s  %s\n",
+						YEAR, AUTHOR);
+				printf("Released under the %s license.\n", LICENSE);
+				printf("\n%s\n", DISCLAIMER);
+				exit(EXIT_SUCCESS);
 				break;
 		}
 	}

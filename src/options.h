@@ -30,7 +30,7 @@
 #endif /* #ifndef __linux__ */
 
 #define VERSION "0.1"
-#define YEAR "2009"
+#define YEAR "2009, 2010"
 #define AUTHOR "Robrecht Dewaele"
 #define LICENSE "GNU GPLv3"
 #define DISCLAIMER \
