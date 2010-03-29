@@ -40,13 +40,12 @@ static void bowshell_callback(char *line) {
 		serial_write(target_fd, settings.eol, 1);
 		if (*line) /* non empty lines go in to history */
 			add_history (line);
+		free(line);
 	}
 	else {
 		puts("\nThank you, come again!");
 		exit(EXIT_SUCCESS);
 	}
-
-	free(line);
 }
 
 /* set fd for serial output and install the bowshell callback function */
