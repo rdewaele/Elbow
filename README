@@ -1,0 +1,31 @@
+1. What is Elbow?
+-----------------
+Elbow is a serial communication client aimed towards embedded programming language REPLs.
+
+What this means is that elbow can connect to a serial device, and send and receive data to/from it.
+It is aimed towards embedded virtual machines such as armpit scheme (http://armpit.sourceforge.net/).
+
+2. Usage.
+---------
+2.1 Starting up.
+----------------
+elbow --help is supposed to tell you everything you want to know about elbow options.
+The list shown by the help function will always be up to date, whereas this readme might limp a little bit behind.
+
+Currently elbow supports configuring the following properties through commandline options (default):
+	- baudrate (9600);
+	- device to connect to (/dev/ttyUSB0);
+	- end of line character to use (carriage return);
+	- file to send before interactive shell starts ();
+	- send STX/ETX character to mark start and end of a file transfer (disabled).
+(It is likely that default settings are right for a linux host and an armpit scheme target.)
+
+The other switches show help (-?, --help), usage (--usage) and version (-v, --version) information.
+
+2.2 Line by line communication.
+-------------------------------
+Once elbow is properly started up, you are presented with a GNU Readline interface.
+This gives you approximately the same feel as a bash shell, with history and reverse-i-search and much more (see man 3 readline for a lot more information).
+Lines are not sent until you hit return, enabling line editing.
+
+Pressing ctrl+d will exit elbow (as will ctrl+c in a less orthodox way :P).

@@ -1,0 +1,3 @@
+Just run 'make' to create the elbow executable.
+Make sure you have the development packages installed for GNU Readline (libreadline-dev) and libpopt-dev.
+You'll find the executable in the src folder.
