@@ -30,11 +30,15 @@
 
 #define DEFAULT_BUFFER_SIZE 256
 
+static void printMOTD(void) {
+	printf("Welcome to Elbow v%s\n", VERSION);
+}
+
 /* ---- */
 /* MAIN */
 /* ---- */
 int main(int argc, const char * argv[]) {
-	int cread, serial_fd, stdin_fd, nfds, fds_ready;
+	int cread, serial_fd, nfds, fds_ready;
 	char readbuf[DEFAULT_BUFFER_SIZE];
 
 	/* set options from commandline */
@@ -55,16 +59,17 @@ int main(int argc, const char * argv[]) {
 	FD_ZERO(&wr); /* won't be used, so one-time zero */
 	FD_ZERO(&er); /* won't be used, so one-time zero */
 
-	stdin_fd = fileno(stdin);
+	nfds = 1 + (serial_fd > STDIN_FILENO ? serial_fd : STDIN_FILENO);
 
-	nfds = 1 + (serial_fd > stdin_fd ? serial_fd : stdin_fd);
+	/* say hi */
+	printMOTD();
 
 	/* start receiving from the pipe to the child process and from the
 	 * serial device */
 	for (;;) {
 		/* reset "fd_set"s each loop because select() modifies it */
 		FD_ZERO( &rd );
-		FD_SET( stdin_fd, &rd );
+		FD_SET( STDIN_FILENO, &rd );
 		FD_SET( serial_fd, &rd ); /* watch the serial port for reading */
 
 		/* select filedescriptors that are ready for reading */
@@ -72,7 +77,7 @@ int main(int argc, const char * argv[]) {
 		if ( fds_ready == -1 ) { perror("select()"); }
 
 		/* stdin ready */
-		if (FD_ISSET(stdin_fd, &rd))
+		if (FD_ISSET(STDIN_FILENO, &rd))
 			bowshell_notify();
 
 		/* serial ready */

@@ -32,7 +32,7 @@ int serial_init(const char * device) {
   int fd;
   struct termios newtio;
 
-  fd = open(device, O_RDWR | O_NOCTTY);
+  fd = open(device, O_RDWR);
   if (fd < 0) {
     perror(device);
     exit(-1);

@@ -33,7 +33,7 @@ DATE=`date +%F_%H-%M-%S`
 all: .ctags $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS) make.depend
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
 %.o: %.c
 	$(CC) $(CCFLAGS) -c $< -o $@
