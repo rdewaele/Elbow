@@ -33,7 +33,7 @@
 #define STX 0x2
 #define ETX 0x3
 
-static void replacechars(char * str, char from, char to) {
+void replacechars(char * str, char from, char to) {
 	while ((str = strchr(str, from)))
 		*str = to;
 }
@@ -50,6 +50,7 @@ void sendfiles(int filesc, const char * filesv[], int serialfd) {
 			perror(filesv[i]);
 			continue;
 		}
+		/* TODO hackery has to go */
 		while ((n_read = read(filesfd, readbuf, READBUF_SIZE)) > 0) {
 			replacechars(readbuf, '\n', '\r');
 			replacechars(readbuf, '\t', ' ');

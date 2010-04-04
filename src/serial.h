@@ -25,7 +25,6 @@
 /* initialize a serial device and return file descriptor to it */
 int serial_init(const char * device);
 
-ssize_t serial_read(int serial_fd, char *buf, size_t len);
 ssize_t serial_write(int serial_fd, const char *buf, size_t len);
 
 #endif

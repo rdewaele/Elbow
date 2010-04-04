@@ -93,6 +93,8 @@ int main(int argc, const char * argv[]) {
 				}
 				else {
 					readbuf[cread] = '\0'; /* make readbuf suitable for printing */
+					/* TODO: hackery has to go */
+					replacechars(readbuf, '\r', '\n');
 					bowshell_print(readbuf);
 				}
 			}

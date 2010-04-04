@@ -49,7 +49,6 @@ int serial_init(const char * device) {
   newtio.c_oflag &= ~(OCRNL | OPOST);
 
   newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-//  newtio.c_lflag |= ICANON;
 
   newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
   newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
@@ -71,10 +70,6 @@ int serial_init(const char * device) {
 	 * were successful */
 
   return fd;
-}
-
-ssize_t serial_read(int serial_fd, char *buf, size_t len) {
-  return read(serial_fd, buf, len);
 }
 
 ssize_t serial_write(int serial_fd, const char *buf, size_t len) {

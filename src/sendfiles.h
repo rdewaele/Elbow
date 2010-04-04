@@ -22,4 +22,6 @@
 
 void sendfiles(int filesc, const char * filesv[], int serialfd);
 
+void replacechars(char * str, char from, char to);
+
 #endif
