@@ -48,7 +48,7 @@ int serial_init(const char * device) {
 
   newtio.c_oflag &= ~(OCRNL | OPOST);
 
-  newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+  newtio.c_lflag &= ~(ICANON | ECHO | ISIG);
 
   newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
   newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
