@@ -99,7 +99,7 @@ static const char * getEndOfLine(const char * description) {
 
 /* enumeration indicating whether an option has to return from
  * poptGetNextOpt, and if so which option caused the return */
-static enum poptReturn {
+enum poptReturn {
 	PR_NORETURN, PR_BAUDRATE, PR_EOL, PR_VERSION
 };
 
