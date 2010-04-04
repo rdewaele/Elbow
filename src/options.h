@@ -23,7 +23,7 @@
 #include <stdbool.h>
 #include <termios.h>
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 #define YEAR "2009, 2010"
 #define AUTHOR "Robrecht Dewaele"
 #define LICENSE "GNU GPLv3"
