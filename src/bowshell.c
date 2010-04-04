@@ -72,6 +72,14 @@ int bowshell_print (char *text) {
 	for (i = 0; i < strlen(rl_line_buffer); ++i)
 		printf("\b \b");
 
+	/* XXX */
+#ifdef DEBUG
+	printf("\n\\n=%d \\r=%d -- |", '\n', '\r');
+	for (i = 0; i < strlen(text); ++i)
+		printf(" %d |", text[i]);
+	puts("\n");
+#endif /* DEBUG */
+
 	/* print line and return number of characters printed */
 	ret = printf("%s", text);
 	rl_forced_update_display();

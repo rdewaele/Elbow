@@ -32,7 +32,7 @@ int serial_init(const char * device) {
   int fd;
   struct termios newtio;
 
-  fd = open(device, O_RDWR);
+  fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
     perror(device);
     exit(-1);
@@ -66,6 +66,9 @@ int serial_init(const char * device) {
   if (-1 == tcsetattr(fd,TCSANOW,&newtio)) {
     perror("tcsetattr");
   }
+
+	/* TODO: add call to tcgetattr(fd,oldtio) to check whether all changes
+	 * were successful */
 
   return fd;
 }
