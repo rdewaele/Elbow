@@ -59,16 +59,16 @@ static const char * endlines[][2] =
 };
 
 /* print all valid baudrate numbers */
-static void printBaudrates(void) {
+static void printBaudrates(int baudrate) {
 	unsigned int i;
-	printf("Invalid baudrate!\nValid baudrates are: ");
+	printf("Invalid baudrate: %d\nValid baudrates are: ", baudrate);
 	for (i = 0; i < BAUDRATES_SIZE - 1; ++i)
 		printf("%d, ", baudrates[i][0]);
 	printf("%d\n", baudrates[i][0]);
 }
 
-/* lookup baudrate number and return baudrate constant
- * exits when baudrate number is invalid */
+/* lookup baudrate constant
+ * if baudrate number is invalid, print valid ones and exit */
 static int getBaudrate(int baudrate) {
 	unsigned int i;
 	for (i = 0; i < BAUDRATES_SIZE; ++i) {
@@ -76,10 +76,12 @@ static int getBaudrate(int baudrate) {
 			return baudrates[i][1];
 	}
 
-	printBaudrates();
+	printBaudrates(baudrate);
 	exit(EXIT_FAILURE);
 }
 
+/* lookup end of line character (sequence)
+ * if description is invalid, print valid ones and exit */
 static const char * getEndOfLine(const char * description) {
 	unsigned int i;
 
@@ -95,76 +97,91 @@ static const char * getEndOfLine(const char * description) {
 /* libpopt structures defining all the options for Elbow */
 /*********************************************************/
 
-/*
- * b = baudrate
- * d = device
- * e = end of line
- * f = file
- */
+/* enumeration indicating whether an option has to return from
+ * poptGetNextOpt, and if so which option caused the return */
+static enum poptReturn {
+	PR_NORETURN, PR_BAUDRATE, PR_EOL, PR_VERSION
+};
 
+/* generic elbow options */
 static struct poptOption elbowOptionsTable[] = {
-	{ "baudrate", 'b', POPT_ARG_INT, &settings.rate, 2,
+	{ "baudrate", 'b', POPT_ARG_INT, &settings.rate, PR_BAUDRATE,
 		"baudrate to use for communication",
 		"baudrate" },
 
-	{ "device", 'd', POPT_ARG_STRING, &settings.device, 0,
+	{ "device", 'd', POPT_ARG_STRING, &settings.device, PR_NORETURN,
 		"device node to connect to",
 		"device" },
 
-	{ "eol", 'e', POPT_ARG_STRING, &settings.eol, 1,
+	{ "eol", 'e', POPT_ARG_STRING, &settings.eol, PR_EOL,
 		"end of line character to use - valid: cr, lf, crlf",
 		"end of line" },
 
-	{ "file", 'f', POPT_ARG_STRING, &settings.file, 0,
+	{ "file", 'f', POPT_ARG_STRING, &settings.file, PR_NORETURN,
 		"file to send before starting interactive session",
 		"file" },
 
-	{ "stxetx", 'S', POPT_ARG_NONE, &settings.stxetx, 0,
+	{ "stxetx", 'S', POPT_ARG_NONE, &settings.stxetx, PR_NORETURN,
 		"use STX/ETX ascii codes to mark start/end of a file transmission",
 		NULL },
 
-	{ "version", 'v', POPT_ARG_NONE, NULL, 3,
+	{ "version", 'v', POPT_ARG_NONE, NULL, PR_VERSION,
 		"show version and copyright information",
 		NULL },
 
 	POPT_TABLEEND
 };
 
+/* main options table, including all relevant tables */
 static struct poptOption options[] = {
-	{ NULL, '\0', POPT_ARG_INCLUDE_TABLE, NULL, 0,
+	{ NULL, '\0', POPT_ARG_INCLUDE_TABLE, NULL, PR_NORETURN,
 		"Elbow options",
 		NULL },
 
 	POPT_AUTOHELP	POPT_TABLEEND
 };
 
+/* first parse all options, and save arguments in the sessions struct
+ * exit on any error encountered, if none present, proceed and return */
 void setOptions(int argc, const char * argv[]) {
 	int ret;
+	bool printVersion = false;
 
 	poptContext optCon = poptGetContext(NULL, argc, argv, options, 0);
 
 	options[0].arg = elbowOptionsTable;
 
-	while ((ret = poptGetNextOpt(optCon))) {
-		if (-1 == ret) /* parsing done */
-			break;
-
+	while ((ret = poptGetNextOpt(optCon)) > 0) {
 		switch (ret) {
-			case 1: /* eol */
+
+			case PR_EOL:
 				settings.eol = getEndOfLine(settings.eol);
 				break;
-			case 2: /* baudrate */
+
+			case PR_BAUDRATE:
 				settings.rate = getBaudrate(settings.rate);
 				break;
-			case 3: /* version */
-				printf("Elbow version %s\n", VERSION);
-				printf("Copyright (C) %s  %s\n",
-						YEAR, AUTHOR);
-				printf("Released under the %s license.\n", LICENSE);
-				printf("\n%s\n", DISCLAIMER);
-				exit(EXIT_SUCCESS);
+
+			case PR_VERSION:
+				printVersion = true;
 				break;
 		}
+	}
+
+	/* report parsing error if present and exit */
+	if (ret < -1) {
+		printf("\n%s: %s\n\n", poptStrerror(ret), poptBadOption(optCon, 0));
+		poptPrintHelp(optCon, stdout, 0);
+		exit(EXIT_FAILURE);
+	}
+
+	/* print version information and exit */
+	if (printVersion) {
+		printf("Elbow version %s\n", VERSION);
+		printf("Copyright (C) %s  %s\n", YEAR, AUTHOR);
+		printf("Released under the %s license.\n", LICENSE);
+		printf("\n%s\n", DISCLAIMER);
+		exit(EXIT_SUCCESS);
 	}
 
 	optCon = poptFreeContext(optCon);
