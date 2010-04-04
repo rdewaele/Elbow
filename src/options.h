@@ -23,12 +23,6 @@
 #include <stdbool.h>
 #include <termios.h>
 
-#ifndef __linux__
-#define B57600  57600
-#define B115200 115200
-#define B230400 230400
-#endif /* #ifndef __linux__ */
-
 #define VERSION "0.1"
 #define YEAR "2009, 2010"
 #define AUTHOR "Robrecht Dewaele"
