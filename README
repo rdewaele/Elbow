@@ -1,31 +1,67 @@
+0.Copyright notice.
+-------------------
+Copyright (C) 2010 Robrecht Dewaele
+
+This file is part of Elbow.
+
+Elbow is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Elbow is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
+
 1. What is Elbow?
 -----------------
-Elbow is a serial communication client aimed towards embedded programming language REPLs.
+Elbow is a serial communication client aimed towards embedded
+programming language REPLs.
 
-What this means is that elbow can connect to a serial device, and send and receive data to/from it.
-It is aimed towards embedded virtual machines such as armpit scheme (http://armpit.sourceforge.net/).
+What this means is that elbow can connect to a serial device, and
+send and receive data to/from it. It is aimed towards embedded
+virtual machines such as armpit scheme (which can be found at
+http://armpit.sourceforge.net/).
 
 2. Usage.
 ---------
 2.1 Starting up.
 ----------------
-elbow --help is supposed to tell you everything you want to know about elbow options.
-The list shown by the help function will always be up to date, whereas this readme might limp a little bit behind.
+elbow --help should tell you everything about the elbow options.
+The list shown by the help function will always be up to date, whereas
+this readme might limp a little bit behind.
 
-Currently elbow supports configuring the following properties through commandline options (default):
+Currently elbow supports configuring the following properties through
+commandline options (default in brackets):
 	- baudrate (9600);
 	- device to connect to (/dev/ttyUSB0);
 	- end of line character to use (carriage return);
 	- file to send before interactive shell starts ();
-	- send STX/ETX character to mark start and end of a file transfer (disabled).
-(It is likely that default settings are right for a linux host and an armpit scheme target.)
+	- send STX/ETX character to mark start and end of a file transfer
+	  (disabled).
 
-The other switches show help (-?, --help), usage (--usage) and version (-v, --version) information.
+The default settings should work for an armpit scheme target.
+
+The other switches are for:
+  - help (-?, --help);
+	- usage (--usage);
+	- version and copyright information (-v, --version).
 
 2.2 Line by line communication.
 -------------------------------
-Once elbow is properly started up, you are presented with a GNU Readline interface.
-This gives you approximately the same feel as a bash shell, with history and reverse-i-search and much more (see man 3 readline for a lot more information).
+Once elbow is properly started up, you are greeted by a welcome
+message, followd with a GNU Readline prompt. This gives you a command
+line interface similar to that of the bash shell. Features include
+but are not limited to history and reverse-i-search.
+(See man 3 readline for a lot more information).
+
 Lines are not sent until you hit return, enabling line editing.
 
-Pressing ctrl+d will exit elbow (as will ctrl+c in a less orthodox way :P).
+2.3 Shutting down.
+------------------
+Pressing ctrl+d will exit elbow (as will ctrl+c in a more brutal
+fashion ;-)).

@@ -1,3 +1,26 @@
-Just run 'make' to create the elbow executable.
-Make sure you have the development packages installed for GNU Readline (libreadline-dev) and libpopt-dev.
-You'll find the executable in the src folder.
+0.Copyright notice.
+-------------------
+Copyright (C) 2010 Robrecht Dewaele
+
+This file is part of Elbow.
+
+Elbow is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Elbow is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
+
+1.Basic build instructions.
+---------------------------
+First, make sure you have the development packages installed for
+GNU Readline (libreadline-dev) and libpopt (libpopt-dev).
+
+Then, run 'make' in the base directory to create the elbow
+exectuable. It should appear in the base directory.
