@@ -17,6 +17,13 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* TODO
+ * Bowshell is currently only able to use the callback interface from
+ * readline. When READLINE_CALLBACKS is not defined, this interface is
+ * unavailable. A possible solution is to provide an alternative
+ * implementation, using fork() and pipes.
+ */
+
 #include "bowshell.h"
 #include "serial.h"
 #include "options.h"
