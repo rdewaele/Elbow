@@ -20,6 +20,8 @@
 #ifndef BOWSHELL_H
 #define BOWHSELL_H
 
+#include <stdbool.h>
+
 /* print the buffer pointed to by text to stdout
  * will keep user input on the bottom line when present */
 int bowshell_print (char *text);
@@ -28,6 +30,13 @@ int bowshell_print (char *text);
  * functionality is used
  * fd is where user input should be sent to */
 void bowshell_init(int fd);
+
+/* indicates whether /last/ line handled by bowhsell was EOF */
+bool bowshell_eof(void);
+
+/* restore terminal to original state and clean up memory
+ * this function effectively unloads bowshell */
+void bowshell_cleanup(void);
 
 /* bowshell_notify should be called every time user input
  * becomes vailable, so bowshell can handle it */

@@ -77,8 +77,14 @@ int main(int argc, const char * argv[]) {
 		if ( fds_ready == -1 ) { perror("select()"); }
 
 		/* stdin ready */
-		if (FD_ISSET(STDIN_FILENO, &rd))
+		if (FD_ISSET(STDIN_FILENO, &rd)) {
 			bowshell_notify();
+			if (bowshell_eof()) {
+				bowshell_cleanup();
+				puts("Thank you, come again!");
+				return 0;
+			}
+		}
 
 		/* serial ready */
 		if (FD_ISSET(serial_fd, &rd)) {

@@ -37,6 +37,10 @@
 
 #define DEFAULT_PROMPT ""
 
+/* indicates whether /last/ line handled by bowhsell was EOF */
+static bool read_eof = false;
+
+/* file descriptor bowshell will write to */
 static int target_fd;
 
 /* GNU readline callback function, to process user input. */
@@ -47,18 +51,31 @@ static void bowshell_callback(char *line) {
 		serial_write(target_fd, settings.eol, 1);
 		if (*line) /* non empty lines go in to history */
 			add_history (line);
-		free(line);
+		rl_free(line);
+		read_eof = false;
 	}
-	else {
-		puts("\nThank you, come again!");
-		exit(EXIT_SUCCESS);
-	}
+	else
+		read_eof = true;
 }
 
 /* set fd for serial output and install the bowshell callback function */
 void bowshell_init(int new_target_fd) {
 	target_fd = new_target_fd;
 	rl_callback_handler_install (DEFAULT_PROMPT, bowshell_callback);
+}
+
+/* return read_eof status */
+bool bowshell_eof(void) {
+	return read_eof;
+}
+
+/* restore terminal to original state and clean up memory
+ * this function effectively unloads bowshell */
+void bowshell_cleanup(void) {
+	rl_free_line_state();
+	rl_free_undo_list();
+	clear_history();
+	rl_callback_handler_remove();
 }
 
 /* feed next character on the input to readline
