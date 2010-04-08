@@ -93,8 +93,11 @@ int main(int argc, const char * argv[]) {
 				}
 				else {
 					readbuf[cread] = '\0'; /* make readbuf suitable for printing */
-					/* TODO: hackery has to go */
+#ifdef __CYGWIN__
+					/* XXX Setting icrnl on the serial line is not supported in
+					 * cygwin, so we change those characters here manually. */
 					replacechars(readbuf, '\r', '\n');
+#endif /* __CYGWIN__ */
 					bowshell_print(readbuf);
 				}
 			}
