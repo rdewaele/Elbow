@@ -39,7 +39,7 @@ CWARNINGS=-W -Wall -Wextra -Wundef -Wendif-labels -Wshadow\
 					-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes\
 					-Wnested-externs -Winline -Wdisabled-optimization\
 					-Wno-missing-field-initializers
-CFLAGS=-g -O3 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE $(CWARNINGS)\
+CFLAGS=-g -O0 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE $(CWARNINGS)\
 			 #-DDEBUG
 LDLIBS=-lreadline -lpopt
 SOURCES=main.c bowshell.c serial.c sendfiles.c options.c
@@ -50,11 +50,14 @@ all: main tags
 
 main: $(OBJECTS)
 
+test: main
+	./$<
+
 tags: *.c *.h
 	ctags $^
 
 grind: $(EXECUTABLE)
-	valgrind ./$<
+	valgrind -v --leak-check=full --show-reachable=yes ./$<
 
 clean:
 	@rm -f $(OBJECTS) $(EXECUTABLE)
