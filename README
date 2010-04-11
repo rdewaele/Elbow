@@ -33,11 +33,11 @@ http://armpit.sourceforge.net/).
 ----------------
 elbow --help should tell you everything about the elbow options.
 The list shown by the help function will always be up to date, whereas
-this readme might limp a little bit behind.
+this read-me file might limp a little bit behind.
 
 Currently elbow supports configuring the following properties through
-commandline options (default in brackets):
-	- baudrate (9600);
+command-line options (default in brackets):
+	- baud rate (9600);
 	- device to connect to (/dev/ttyUSB0);
 	- end of line character to use (carriage return);
 	- file to send before interactive shell starts ();
@@ -47,14 +47,14 @@ commandline options (default in brackets):
 The default settings should work for an armpit scheme target.
 
 The other switches are for:
-  - help (-?, --help);
+	- help (-?, --help);
 	- usage (--usage);
 	- version and copyright information (-v, --version).
 
 2.2 Line by line communication.
 -------------------------------
 Once elbow is properly started up, you are greeted by a welcome
-message, followd with a GNU Readline prompt. This gives you a command
+message, followed by a GNU Readline prompt. This gives you a command
 line interface similar to that of the bash shell. Features include
 but are not limited to history and reverse-i-search.
 (See man 3 readline for a lot more information).

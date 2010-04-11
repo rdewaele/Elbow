@@ -23,4 +23,4 @@ First, make sure you have the development packages installed for
 GNU Readline (libreadline-dev) and libpopt (libpopt-dev).
 
 Then, run 'make' in the base directory to create the elbow
-exectuable. It should appear in the base directory.
+executable. It should appear in the base directory.
