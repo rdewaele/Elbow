@@ -37,7 +37,7 @@ struct settings settings = {
 
 #define BPAIR(x) {x, B ## x}
 #define BPAIR_SIZE (sizeof((int[])BPAIR(50)) / sizeof(int))
-#define BAUDRATES_SIZE (sizeof(baudrates) / (BPAIR_SIZE * sizeof(int *)))
+#define BAUDRATES_SIZE (sizeof(baudrates) / (BPAIR_SIZE * sizeof(int)))
 
 /* array of valid (baudrate number, baudrate constant) pairs */
 static int baudrates[][BPAIR_SIZE] =
@@ -62,7 +62,7 @@ static const char * endlines[][2] =
 static void printBaudrates(int baudrate) {
 	unsigned int i;
 	printf("Invalid baudrate: %d\nValid baudrates are: ", baudrate);
-	for (i = 0; i < BAUDRATES_SIZE - 1; ++i)
+	for (i = 0; i < (BAUDRATES_SIZE - 1); ++i)
 		printf("%d, ", baudrates[i][0]);
 	printf("%d\n", baudrates[i][0]);
 }
