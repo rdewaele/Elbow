@@ -39,8 +39,8 @@ CWARNINGS=-W -Wall -Wextra -Wundef -Wendif-labels -Wshadow\
 					-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes\
 					-Wnested-externs -Winline -Wdisabled-optimization\
 					-Wno-missing-field-initializers
-CFLAGS=-g -O0 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE $(CWARNINGS)\
-			 #-DDEBUG
+CFLAGS=-g -O0 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE=200809L\
+			 $(CWARNINGS) #-DDEBUG
 LDLIBS=-lreadline -lpopt
 SOURCES=main.c bowshell.c serial.c sendfiles.c options.c
 OBJECTS=$(SOURCES:.c=.o)
