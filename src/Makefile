@@ -46,11 +46,11 @@ SOURCES=main.c bowshell.c serial.c sendfiles.c options.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=main
 
-all: main tags
+all: $(EXECUTABLE) tags
 
-main: $(OBJECTS)
+$(EXECUTABLE): $(OBJECTS)
 
-test: main
+test: $(EXECUTABLE)
 	./$<
 
 tags: *.c *.h
