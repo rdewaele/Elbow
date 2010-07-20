@@ -44,11 +44,15 @@ CFLAGS=-g -O0 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE=200809L\
 LDLIBS=-lreadline -lpopt
 SOURCES=main.c bowshell.c serial.c sendfiles.c options.c
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=main
+MAIN=main
+EXECUTABLE=elbow
 
 all: $(EXECUTABLE) tags
 
-$(EXECUTABLE): $(OBJECTS)
+$(EXECUTABLE): $(MAIN)
+	cp $< $@
+
+$(MAIN): $(OBJECTS)
 
 test: $(EXECUTABLE)
 	./$<
@@ -60,7 +64,7 @@ grind: $(EXECUTABLE)
 	valgrind -v --leak-check=full --show-reachable=yes ./$<
 
 clean:
-	@rm -f $(OBJECTS) $(EXECUTABLE)
+	@rm -f $(OBJECTS) $(EXECUTABLE) $(MAIN)
 
 mrproper: clean
 	@rm -f .ctags tags make.depend

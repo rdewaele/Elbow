@@ -16,37 +16,38 @@
 # along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
 
 EXECUTABLE=elbow
-DATE=`date +%F_%H-%M-%S`
+SOURCEDIR=src
+DATE=$(shell date +%F_%H-%M-%S)
+TARFILES=COPYING INSTALL Makefile README src
 TARNAME=$(EXECUTABLE)-$(DATE)
+TARDIRNAME=$(TARNAME)
+TEST=$(SOURCEDIR)/$(EXECUTABLE)
 
-all: $(EXECUTABLE)
 
-$(EXECUTABLE): src/main
-	@cp $< $(EXECUTABLE)
-
-cleanhere:
-	@rm -f $(EXECUTABLE)
-
-mrproperhere: cleanhere
-	@rm -f $(EXECUTABLE)-*.tar.bz2
-
-clean: src/clean cleanhere
-
-mrproper: src/mrproper mrproperhere
-
-tar: tmp mrproper
-	@tar cvjf $</$(TARNAME).tar.bz2\
-		--exclude .git --exclude $< --exclude armpit_tests .\
-		&& mv $</$(TARNAME).tar.bz2 .\
-		&& rmdir $<
-
-tmp:
-	@mkdir tmp
+$(EXECUTABLE): $(TEST)
+	cp $(SOURCEDIR)/$(EXECUTABLE) $(EXECUTABLE)
 
 src/%:
 	$(MAKE) -C src $*
 
 %::
-	$(MAKE) -C src $@
+	$(MAKE) -C $(SOURCEDIR) $@
 
-.PHONY: all cleanhere mrproperhere clean mrproper tar
+clean:
+	rm -f $(EXECUTABLE)
+	$(MAKE) -C $(SOURCEDIR) $@
+
+mrproper: clean
+	rm -f $(EXECUTABLE)-*.tar.bz2
+	$(MAKE) -C $(SOURCEDIR) $@
+
+tar: $(TARDIRNAME) mrproper
+	cp -r $(TARFILES) $<
+	tar cvjf $(TARNAME).tar.bz2 $<
+	rm -rf $<
+
+$(TARDIRNAME):
+	rm -rf $@
+	mkdir $@
+
+.PHONY: clean mrproper tar $(TARDIRNAME)
