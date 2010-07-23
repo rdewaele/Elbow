@@ -1,5 +1,5 @@
-CFLAGS=-O3 $(shell pkg-config --cflags gtk+-2.0)
-LDLIBS=$(shell pkg-config --libs gtk+-2.0)
+CFLAGS=-O3 $(shell pkg-config --cflags gtk+-2.0 gmodule-2.0)
+LDLIBS=$(shell pkg-config --libs gtk+-2.0 gmodule-2.0)
 
 EXECUTABLE=elbow-gui
 MAIN=main

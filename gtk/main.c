@@ -1,7 +1,15 @@
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 void on_window_destroy(GtkObject *object, gpointer user_data) {
+	exit(EXIT_SUCCESS);
 	gtk_main_quit();
+}
+
+G_MODULE_EXPORT
+void ElbowMainToolOpen(GtkWidget * object, gpointer user_data) {
+	g_printf("Hello there.\n");
+	return;
 }
 
 int main(int argc, char *argv[]) {
