@@ -29,6 +29,7 @@
 #include "serial.h"
 #include "options.h"
 
+#define PROGRESS_INTERVAL 200
 #define READBUF_SIZE 200
 #define STX 0x2
 #define ETX 0x3
@@ -41,21 +42,34 @@ void replacechars(char * str, char from, char to) {
 void sendfiles(int filesc, const char * filesv[], int serialfd) {
 	int filesfd;
 	int i;
-	ssize_t n_read;
+	ssize_t n_read, n_swritten;
+	off_t n_current, n_total;
+	unsigned int progress;
 	char readbuf[READBUF_SIZE];
 
+	/* loop through files and send them */
 	for (i = 0; i < filesc; ++i) {
 		filesfd = open(filesv[i], O_RDONLY);
 		if (-1 == filesfd) {
 			perror(filesv[i]);
 			continue;
 		}
-		/* TODO hackery has to go */
+		n_total = lseek(filesfd, 0, SEEK_END);
+		progress = 0;
+		fprintf(stderr, "%s, %lu bytes\n", filesv[i], n_total);
+		lseek(filesfd, 0, SEEK_SET);
+		/* send file until no more bytes are read */
 		while ((n_read = read(filesfd, readbuf, READBUF_SIZE)) > 0) {
+			/* TODO hackery has to go */
 			replacechars(readbuf, '\n', '\r');
 			replacechars(readbuf, '\t', ' ');
-			serial_write(serialfd, readbuf, n_read);
+			n_swritten = serial_write(serialfd, readbuf, n_read);
+			if ((progress += n_swritten) > PROGRESS_INTERVAL) {
+				n_current = lseek(filesfd, 0, SEEK_CUR);
+				fprintf(stderr, "\b\b\b\b    \b\b\b\b%lu%%", 100 * n_current / n_total);
+			}
 		}
+		fprintf(stderr, "\n");
 	}
 	return;
 }
