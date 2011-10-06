@@ -1,0 +1,3 @@
+// CMake defines the version numbers for Elbow
+#define Elbow_VERSION_MAJOR @Elbow_VERSION_MAJOR@
+#define Elbow_VERSION_MINOR @Elbow_VERSION_MINOR@
