@@ -1,2 +1,5 @@
 # ignore main executable
 elbow
+
+# ignore vim swap files
+*.swp
