@@ -3,3 +3,9 @@ elbow
 
 # ignore vim swap files
 *.swp
+
+# ignore all cmake generated files
+Makefile
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
