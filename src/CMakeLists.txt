@@ -16,11 +16,18 @@ set (CFLAGS
 	-g -O0 -pipe -pedantic -std=c99 ${CWARNINGS}
 	)
 
-if (UNIX)
-	if (CMAKE_COMPILER_IS_GNUCC)
-		add_definitions (${CFLAGS})
-	endif (CMAKE_COMPILER_IS_GNUCC)
-endif (UNIX)
+#set (CMAKE_C_FLAGS -03)
+
+#if (UNIX)
+#	if (CMAKE_COMPILER_IS_GNUCC)
+#		set (TEMP ${CMAKE_C_FLAGS})
+#		set (CMAKE_C_FLAGS "")
+#		add_definitions (${CFLAGS} ${TEMP})
+#	endif (CMAKE_COMPILER_IS_GNUCC)
+#endif (UNIX)
+
+set (CMAKE_C_FLAGS_DEVELOPMENT "-g -O0 -pipe -pedantic -std=c99 -W -Wall -Wextra -Wundef -Wendif-labels -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wdisabled-optimization -Wno-missing-field-initializers"
+	)
 
 # configure a header file to pass some of the CMake settings to the source code
 configure_file (
