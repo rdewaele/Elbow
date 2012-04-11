@@ -61,7 +61,7 @@ static void bowshell_callback(char *line) {
 /* set fd for serial output and install the bowshell callback function */
 void bowshell_init(int new_target_fd) {
 	target_fd = new_target_fd;
-	rl_callback_handler_install (DEFAULT_PROMPT, bowshell_callback);
+	rl_callback_handler_install(DEFAULT_PROMPT, bowshell_callback);
 }
 
 /* return read_eof status */
