@@ -41,6 +41,7 @@ struct settings {
 	const char * eol;
 	const char * file;
 	bool stxetx;
+	bool nodup_crnl;
 } settings;
 
 /* parse the command line options and set them in the options struct */

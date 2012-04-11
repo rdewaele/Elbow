@@ -43,6 +43,52 @@ static bool read_eof = false;
 /* file descriptor bowshell will write to */
 static int target_fd;
 
+/* forward declarations */
+static size_t collapse_char_cont(char *, const size_t, const char, char);
+/* XXX currently unused */
+//static size_t collapse_char(char *, const size_t, const char);
+
+/* collapse a sequence of a given char into a single occurrence of that char
+ * <*> This function is intended for use on chunks of a bigger string. The
+ *     'previous' parameter indicates what the character was before the
+ *     first character of the current string.
+ * <*> returns new buffer length */
+size_t collapse_char_cont(char *buffer, const size_t buflen, const char seq, char previous) {
+	size_t i;
+	unsigned int count = 0;
+
+	/* a buffer with fewer than two characters cannot contain duplicates */
+	if (buflen < 2)
+		return 1;
+
+	for (i = 0; i < buflen; ++i) {
+		if ((seq == previous) && (previous == buffer[i]))
+			++count;
+		previous = buffer[i - count] = buffer[i];
+	}
+	return i - count;
+}
+
+/* XXX currently unused */
+/* collapse a sequence of a given char into a single occurrence of that char
+ * <*> returns new buffer length */
+//size_t collapse_char(char *buffer, const size_t buflen, const char seq) {
+//	size_t i;
+//	char previous = buffer[0];
+//	unsigned int count = 0;
+//
+//	/* a buffer with fewer than two characters cannot contain duplicates */
+//	if (buflen < 2)
+//		return 1;
+//
+//	for (i = 1; i < buflen; ++i) {
+//		if ((seq == previous) && (previous == buffer[i]))
+//			++count;
+//		previous = buffer[i - count] = buffer[i];
+//	}
+//	return i - count;
+//}
+
 /* GNU readline callback function, to process user input. */
 static void bowshell_callback(char *line) {
 	/* EOF is indicated by line == NULL (see GNU readline documentation) */
@@ -90,7 +136,12 @@ void bowshell_notify() {
 int bowshell_print (char *text) {
 	int ret;
 	unsigned int i;
+	static char last = '\n';
 	rl_save_prompt();
+	
+	/* TODO allow collapsing of characters other than \n (notably \r)*/
+	if (settings.nodup_crnl)
+		collapse_char_cont(text, strlen(text) + 1 /* +1: copy '\0' */, '\n', last);
 
 	/* erase current line */
 	for (i = 0; i < strlen(rl_line_buffer); ++i)
@@ -107,5 +158,6 @@ int bowshell_print (char *text) {
 	/* print line and return number of characters printed */
 	ret = printf("%s", text);
 	rl_forced_update_display();
+	last = text[ret - 1];
 	return ret;
 }

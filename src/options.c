@@ -28,11 +28,12 @@
 
 /* default settings */
 struct settings settings = {
-	B9600,
-	"/dev/ttyUSB0",
-	"\r",
-	NULL,
-	false
+	B9600,          /* baudrate                    */
+	"/dev/ttyUSB0", /* device                      */
+	"\r",           /* eol character               */
+	NULL,           /* file to send                */
+	false,          /* stxetx delimiting           */
+	false           /* skip duplicate {cr,nl,crnl} */
 };
 
 #define BPAIR(x) {x, B ## x}
@@ -123,6 +124,10 @@ static struct poptOption elbowOptionsTable[] = {
 
 	{ "stxetx", 'S', POPT_ARG_NONE, &settings.stxetx, PR_NORETURN,
 		"use STX/ETX ascii codes to mark start/end of a file transmission",
+		NULL },
+
+	{ "nodup_crnl", 'N', POPT_ARG_NONE, &settings.nodup_crnl, PR_NORETURN,
+		"avoid printing empty lines by ignoring sequential newline characters",
 		NULL },
 
 	{ "version", 'v', POPT_ARG_NONE, NULL, PR_VERSION,
