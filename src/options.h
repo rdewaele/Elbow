@@ -24,7 +24,7 @@
 #include <termios.h>
 
 #define VERSION "0.2"
-#define YEAR "2009, 2010"
+#define YEAR "2009-2012"
 #define AUTHOR "Robrecht Dewaele"
 #define LICENSE "GNU GPLv3"
 #define DISCLAIMER \
