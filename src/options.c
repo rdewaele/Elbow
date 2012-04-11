@@ -196,7 +196,6 @@ void setOptions(int argc, const char * argv[]) {
 		printf("Copyright (C) %s  %s\n", YEAR, AUTHOR);
 		printf("Released under the %s license.\n", LICENSE);
 		printf("\n%s\n", DISCLAIMER);
-		exit(EXIT_SUCCESS);
 	}
 
 	optCon = poptFreeContext(optCon);
