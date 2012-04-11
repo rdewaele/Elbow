@@ -28,12 +28,14 @@
 
 /* default settings */
 struct settings settings = {
-	B9600,          /* baudrate                    */
-	"/dev/ttyUSB0", /* device                      */
-	"\r",           /* eol character               */
-	NULL,           /* file to send                */
-	false,          /* stxetx delimiting           */
-	false           /* skip duplicate {cr,nl,crnl} */
+	B9600,          /* baudrate                                                 */
+	"/dev/ttyUSB0", /* device                                                   */
+	"\r",           /* eol character                                            */
+	NULL,           /* file to send                                             */
+	false,          /* stxetx delimiting                                        */
+	false,          /* ignore CR from serial input                              */
+	false,          /* Don't translate CR from serial input to NL               */
+	false           /* skip duplicate {cr,nl,crnl}                              */
 };
 
 #define BPAIR(x) {x, B ## x}
@@ -124,6 +126,14 @@ static struct poptOption elbowOptionsTable[] = {
 
 	{ "stxetx", 'S', POPT_ARG_NONE, &settings.stxetx, PR_NORETURN,
 		"use STX/ETX ascii codes to mark start/end of a file transmission",
+		NULL },
+
+	{ "igncr", 'i', POPT_ARG_NONE, &settings.igncr, PR_NORETURN,
+		"Ignore carriage return on input from serial port.",
+		NULL },
+
+	{ "nocrnl", 'a', POPT_ARG_NONE, &settings.nocrnl, PR_NORETURN,
+		"do NOT translate carriage return to newline for serial input",
 		NULL },
 
 	{ "nodup_crnl", 'N', POPT_ARG_NONE, &settings.nodup_crnl, PR_NORETURN,

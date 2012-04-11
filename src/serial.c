@@ -43,8 +43,11 @@ int serial_init(const char * device) {
   newtio.c_cflag &= ~(CSIZE | PARENB | CSTOPB);
   newtio.c_cflag |= CS8 | CREAD | CLOCAL;
 
-  newtio.c_iflag &= ~(INPCK | IXON | IXOFF | IXANY);
-	newtio.c_iflag |= ICRNL;
+  newtio.c_iflag &= ~(INPCK | IXON | IXOFF | IXANY | IGNCR | ICRNL);
+	if (settings.igncr)
+		newtio.c_iflag |= IGNCR;
+	if (!settings.nocrnl)
+		newtio.c_iflag |= ICRNL;
 
   newtio.c_oflag &= ~(OCRNL | OPOST);
 

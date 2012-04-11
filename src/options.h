@@ -41,6 +41,8 @@ struct settings {
 	const char * eol;
 	const char * file;
 	bool stxetx;
+	bool igncr;
+	bool nocrnl;
 	bool nodup_crnl;
 } settings;
 
