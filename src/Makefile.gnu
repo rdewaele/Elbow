@@ -1,4 +1,4 @@
-# Copyright (C) 2009 2010 Robrecht Dewaele
+# Copyright (C) 2009-2012 Robrecht Dewaele
 #
 # This file is part of Elbow.
 #
