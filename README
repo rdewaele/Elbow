@@ -65,3 +65,15 @@ Lines are not sent until you hit return, enabling line editing.
 ------------------
 Pressing ctrl+d will exit elbow (as will ctrl+c in a more brutal
 fashion ;-)).
+
+3. A note on OS X
+-----------------
+Elbow should compile out of the box on OS X if the necessary compiletime
+dependencies are available: a C compiler, popt and GNU readline.
+I personally use brew to provide these packages on OS X.
+
+Furthermore, building was only tested using the Makefile (Makefile.gnu) at the
+time of writing. It includes a workaround where it links to the correct
+readline library. For more information about why this workaround is needed,
+see the following page:
+http://blogs.perl.org/users/aristotle/2013/07/easy-osx-termreadlinegnu.html
