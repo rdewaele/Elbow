@@ -17,8 +17,7 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SERIAL_H
-#define SERIAL_H
+#pragma once
 
 #include <unistd.h>
 
@@ -26,5 +25,3 @@
 int serial_init(const char * device);
 
 ssize_t serial_write(int serial_fd, const char *buf, size_t len);
-
-#endif

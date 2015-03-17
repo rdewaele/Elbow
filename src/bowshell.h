@@ -17,8 +17,7 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BOWSHELL_H
-#define BOWHSELL_H
+#pragma once
 
 #include <stdbool.h>
 
@@ -41,5 +40,3 @@ void bowshell_cleanup(void);
 /* bowshell_notify should be called every time user input
  * becomes vailable, so bowshell can handle it */
 void bowshell_notify(void);
-
-#endif

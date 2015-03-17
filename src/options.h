@@ -17,8 +17,7 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#pragma once
 
 #include <stdbool.h>
 #include <termios.h>
@@ -48,5 +47,3 @@ struct settings {
 
 /* parse the command line options and set them in the options struct */
 void setOptions(int argc, const char * argv[]);
-
-#endif /* #ifndef OPTIONS_H */

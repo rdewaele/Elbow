@@ -17,11 +17,8 @@
  * along with Elbow.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SENDFILES_H
-#define SENDFILES_H
+#pragma once
 
 void sendfiles(int filesc, const char * filesv[], int serialfd);
 
 void replacechars(char * str, char from, char to);
-
-#endif
