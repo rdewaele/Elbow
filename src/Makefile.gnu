@@ -34,14 +34,25 @@
 # this means that currently GCC is expected. (Or any other compiler
 # with the same behaviour for the particular command line switches.)
 
+# Darwin (OS X) does not provide GNU libreadline
+# Introducing autotools seems such an overhead, so please just configure the
+# BREW_READLINE variable according to your environment.
+UNAME:=$(shell uname)
+ifeq ($(UNAME), Darwin)
+BREW_READLINE=/usr/local/Cellar/readline/6.3.8/
+DARWIN_CFLAGS=-I$(BREW_READLINE)/include -D_DARWIN_C_SOURCE
+DARWIN_LDFLAGS=-L$(BREW_READLINE)/lib
+endif
+
 CWARNINGS=-W -Wall -Wextra -Wundef -Wendif-labels -Wshadow\
           -Wpointer-arith -Wbad-function-cast -Wcast-align\
           -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes\
           -Wnested-externs -Winline -Wdisabled-optimization\
           -Wno-missing-field-initializers
 CFLAGS:=-g -O0 -pipe -pedantic -std=c99 -D_POSIX_C_SOURCE=200809L\
-        $(CWARNINGS) $(CFLAGS)
+        $(CWARNINGS) $(DARWIN_CFLAGS) $(CFLAGS)
 LDLIBS=-lreadline -lpopt
+LDFLAGS=$(DARWIN_LDFLAGS)
 SOURCES=main.c bowshell.c serial.c sendfiles.c options.c
 OBJECTS=$(SOURCES:.c=.o)
 MAIN=main
