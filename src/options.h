@@ -34,7 +34,7 @@
 
 /* this struct is initialized with default options, which will be
  * overridden by command line options when present */
-struct settings {
+extern struct settings {
 	int rate;
 	const char * device;
 	const char * eol;
