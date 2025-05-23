@@ -127,7 +127,7 @@ void bowshell_cleanup(void) {
 /* feed next character on the input to readline
  * the bowhsell callback will be called when this character completes the
  * line (see GNU readline documentation) */
-void bowshell_notify() {
+void bowshell_notify(void) {
 	rl_callback_read_char();
 }
 
