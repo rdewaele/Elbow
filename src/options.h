@@ -39,10 +39,10 @@ extern struct settings {
 	const char * device;
 	const char * eol;
 	const char * file;
-	bool stxetx;
-	bool igncr;
-	bool nocrnl;
-	bool nodup_crnl;
+	int stxetx;
+	int igncr;
+	int nocrnl;
+	int nodup_crnl;
 } settings;
 
 /* parse the command line options and set them in the options struct */
