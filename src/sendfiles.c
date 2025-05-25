@@ -18,6 +18,7 @@
  */
 
 #include <fcntl.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -56,7 +57,7 @@ void sendfiles(int filesc, const char * filesv[], int serialfd) {
 		}
 		n_total = lseek(filesfd, 0, SEEK_END);
 		progress = 0;
-		fprintf(stderr, "%s, %zd bytes\n", filesv[i], n_total);
+		fprintf(stderr, "%s, %" PRId64 " bytes\n", filesv[i], n_total);
 		lseek(filesfd, 0, SEEK_SET);
 		/* send file until no more bytes are read */
 		while ((n_read = read(filesfd, readbuf, READBUF_SIZE)) > 0) {
@@ -66,7 +67,7 @@ void sendfiles(int filesc, const char * filesv[], int serialfd) {
 			n_swritten = serial_write(serialfd, readbuf, n_read);
 			if ((progress += n_swritten) > PROGRESS_INTERVAL) {
 				n_current = lseek(filesfd, 0, SEEK_CUR);
-				fprintf(stderr, "\b\b\b\b    \b\b\b\b%zd%%", 100 * n_current / n_total);
+				fprintf(stderr, "\b\b\b\b    \b\b\b\b%" PRId64 "%%", 100 * n_current / n_total);
 			}
 		}
 		fprintf(stderr, "\n");
