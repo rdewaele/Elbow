@@ -66,14 +66,17 @@ Lines are not sent until you hit return, enabling line editing.
 Pressing ctrl+d will exit elbow (as will ctrl+c in a more brutal
 fashion ;-)).
 
-3. A note on OS X
------------------
-Elbow should compile out of the box on OS X if the necessary compiletime
-dependencies are available: a C compiler, popt and GNU readline.
-I personally use brew to provide these packages on OS X.
+3. Building
+-----------
+Elbow can be compiled on Linux and macOS using CMake.
+It requires a C compiler, libpopt and libreadline.
 
-Furthermore, building was only tested using the Makefile (Makefile.gnu) at the
-time of writing. It includes a workaround where it links to the correct
-readline library. For more information about why this workaround is needed,
-see the following page:
-http://blogs.perl.org/users/aristotle/2013/07/easy-osx-termreadlinegnu.html
+On linux, install these using your preferred package manager.
+
+On macOS these dependencies can be installed e.g. using brew.
+Note that macOS provides BSD libedit as a substitute for GNU readline.
+Elbow is not compatible with libedit, and the CMake scripts make an effort to
+detect the homebrew-installed version first.
+
+Note: Legacy makefiles are still included (Makefile.gnu) but are not actively
+maintained.
