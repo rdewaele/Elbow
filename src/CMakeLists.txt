@@ -1,4 +1,7 @@
 cmake_minimum_required (VERSION 3.10)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 project (Elbow)
 
 # version number
@@ -35,10 +38,17 @@ configure_file (
 	"${PROJECT_BINARY_DIR}/elbow_config.h"
 	)
 
+# add the executable
+add_executable (elbow bowshell.c main.c options.c sendfiles.c serial.c)
+
+# configure dependencies
+find_package(POPT)
+find_package(Readline)
+
+include_directories(${Readline_INCLUDE_DIR} ${POPT_INCLUDE_DIR})
+
 # add the binary tree to the search path for include files so that we will find
 # elbow_config.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-# add the executable
-add_executable (elbow bowshell.c main.c options.c sendfiles.c serial.c)
-target_link_libraries (elbow popt readline)
+target_link_libraries (elbow PRIVATE ${Readline_LIBRARY} ${POPT_LIBRARY})
